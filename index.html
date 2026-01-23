@@ -1,0 +1,2135 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Keseimbangan dalam Fisika Transportasi</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #1a365d;
+            --secondary: #2d3748;
+            --accent: #38b2ac;
+            --light: #f7fafc;
+            --dark: #1a202c;
+            --danger: #e53e3e;
+            --warning: #d69e2e;
+            --success: #48bb78;
+            --radius: 8px;
+            --shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            --transition: all 0.3s ease;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: var(--light);
+            color: var(--dark);
+            line-height: 1.6;
+            transition: var(--transition);
+        }
+
+        body.dark-mode {
+            background-color: var(--dark);
+            color: var(--light);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Header & Navigation */
+        header {
+            background-color: var(--primary);
+            color: white;
+            padding: 1rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: var(--shadow);
+        }
+
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .logo i {
+            color: var(--accent);
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+        }
+
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            transition: var(--transition);
+            padding: 0.5rem 0;
+            position: relative;
+        }
+
+        .nav-links a:hover {
+            color: var(--accent);
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background-color: var(--accent);
+            transition: var(--transition);
+        }
+
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+
+        .theme-toggle {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 1.2rem;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .theme-toggle:hover {
+            color: var(--accent);
+        }
+
+        /* Hero Section */
+        .hero {
+            padding: 4rem 0;
+            text-align: center;
+            background: linear-gradient(135deg, var(--primary) 0%, #2d3748 100%);
+            color: white;
+            border-radius: 0 0 30px 30px;
+            margin-bottom: 3rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero h1 {
+            font-size: 3.5rem;
+            margin-bottom: 1rem;
+            animation: fadeInDown 1s ease;
+        }
+
+        .hero h2 {
+            font-size: 1.5rem;
+            font-weight: 300;
+            margin-bottom: 2rem;
+            animation: fadeInUp 1s ease 0.3s both;
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 2;
+        }
+
+        .vehicle-animation {
+            height: 150px;
+            margin: 2rem auto;
+            position: relative;
+            max-width: 800px;
+            animation: fadeIn 1.5s ease 0.5s both;
+        }
+
+        .road {
+            height: 4px;
+            background-color: white;
+            width: 100%;
+            position: absolute;
+            bottom: 50px;
+            border-radius: 2px;
+        }
+
+        .car {
+            position: absolute;
+            bottom: 20px;
+            left: 0;
+            width: 100px;
+            height: 50px;
+            background-color: var(--accent);
+            border-radius: 10px 10px 0 0;
+            animation: moveCar 8s linear infinite;
+        }
+
+        .car::before {
+            content: '';
+            position: absolute;
+            width: 30px;
+            height: 30px;
+            background-color: rgba(255, 255, 255, 0.7);
+            border-radius: 5px;
+            top: 5px;
+            left: 10px;
+        }
+
+        .car::after {
+            content: '';
+            position: absolute;
+            width: 30px;
+            height: 30px;
+            background-color: rgba(255, 255, 255, 0.7);
+            border-radius: 5px;
+            top: 5px;
+            right: 10px;
+        }
+
+        .wheel {
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            background-color: var(--secondary);
+            border-radius: 50%;
+            bottom: -10px;
+        }
+
+        .wheel.front {
+            left: 15px;
+        }
+
+        .wheel.back {
+            right: 15px;
+        }
+
+        .cta-button {
+            display: inline-block;
+            background-color: var(--accent);
+            color: white;
+            padding: 1rem 2.5rem;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 1.1rem;
+            transition: var(--transition);
+            box-shadow: 0 4px 15px rgba(56, 178, 172, 0.4);
+            animation: pulse 2s infinite;
+        }
+
+        .cta-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(56, 178, 172, 0.6);
+        }
+
+        /* Section Styling */
+        section {
+            padding: 4rem 0;
+        }
+
+        section:nth-child(even) {
+            background-color: rgba(56, 178, 172, 0.05);
+        }
+
+        body.dark-mode section:nth-child(even) {
+            background-color: rgba(56, 178, 172, 0.1);
+        }
+
+        .section-title {
+            text-align: center;
+            font-size: 2.5rem;
+            margin-bottom: 3rem;
+            color: var(--primary);
+            position: relative;
+        }
+
+        body.dark-mode .section-title {
+            color: var(--accent);
+        }
+
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100px;
+            height: 4px;
+            background-color: var(--accent);
+            border-radius: 2px;
+        }
+
+        /* Theory Section */
+        .theory-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        .theory-card {
+            background-color: white;
+            border-radius: var(--radius);
+            padding: 2rem;
+            box-shadow: var(--shadow);
+            transition: var(--transition);
+        }
+
+        body.dark-mode .theory-card {
+            background-color: var(--secondary);
+        }
+
+        .theory-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .theory-card h3 {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            color: var(--primary);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        body.dark-mode .theory-card h3 {
+            color: var(--accent);
+        }
+
+        .theory-card h3 i {
+            color: var(--accent);
+        }
+
+        .theory-card p {
+            margin-bottom: 1rem;
+        }
+
+        .formula {
+            background-color: rgba(56, 178, 172, 0.1);
+            padding: 1rem;
+            border-radius: var(--radius);
+            font-family: 'Courier New', monospace;
+            text-align: center;
+            margin: 1rem 0;
+            font-weight: bold;
+        }
+
+        /* Simulation Section */
+        .simulation-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 3rem;
+            margin-bottom: 3rem;
+        }
+
+        @media (max-width: 992px) {
+            .simulation-container {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .simulation-area {
+            background-color: white;
+            border-radius: var(--radius);
+            padding: 2rem;
+            box-shadow: var(--shadow);
+            display: flex;
+            flex-direction: column;
+        }
+
+        body.dark-mode .simulation-area {
+            background-color: var(--secondary);
+        }
+
+        .canvas-container {
+            flex-grow: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 400px;
+            border-radius: var(--radius);
+            background-color: #f1f5f9;
+            overflow: hidden;
+            position: relative;
+        }
+
+        body.dark-mode .canvas-container {
+            background-color: #2d3748;
+        }
+
+        canvas {
+            display: block;
+            max-width: 100%;
+        }
+
+        .simulation-controls {
+            margin-top: 2rem;
+        }
+
+        .control-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .control-group label {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+        }
+
+        .control-group span {
+            color: var(--accent);
+            font-weight: bold;
+        }
+
+        .slider-container {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        input[type="range"] {
+            flex-grow: 1;
+            height: 8px;
+            border-radius: 4px;
+            background: #cbd5e0;
+            outline: none;
+            -webkit-appearance: none;
+        }
+
+        body.dark-mode input[type="range"] {
+            background: #4a5568;
+        }
+
+        input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: var(--accent);
+            cursor: pointer;
+        }
+
+        input[type="number"] {
+            width: 70px;
+            padding: 0.5rem;
+            border-radius: var(--radius);
+            border: 1px solid #cbd5e0;
+            text-align: center;
+        }
+
+        body.dark-mode input[type="number"] {
+            background-color: #4a5568;
+            border-color: #718096;
+            color: white;
+        }
+
+        .radio-group {
+            display: flex;
+            gap: 1rem;
+            margin-top: 0.5rem;
+        }
+
+        .radio-option {
+            flex: 1;
+            text-align: center;
+        }
+
+        .radio-option input {
+            display: none;
+        }
+
+        .radio-option label {
+            display: block;
+            padding: 0.7rem;
+            background-color: #edf2f7;
+            border-radius: var(--radius);
+            cursor: pointer;
+            transition: var(--transition);
+            font-weight: normal;
+            margin-bottom: 0;
+        }
+
+        body.dark-mode .radio-option label {
+            background-color: #4a5568;
+        }
+
+        .radio-option input:checked + label {
+            background-color: var(--accent);
+            color: white;
+        }
+
+        .simulation-output {
+            background-color: white;
+            border-radius: var(--radius);
+            padding: 2rem;
+            box-shadow: var(--shadow);
+            margin-top: 2rem;
+        }
+
+        body.dark-mode .simulation-output {
+            background-color: var(--secondary);
+        }
+
+        .status-indicator {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 1rem;
+            border-radius: var(--radius);
+            font-weight: bold;
+            font-size: 1.2rem;
+            margin-bottom: 1.5rem;
+            transition: var(--transition);
+        }
+
+        .status-balanced {
+            background-color: rgba(72, 187, 120, 0.2);
+            color: var(--success);
+            border: 2px solid var(--success);
+        }
+
+        .status-warning {
+            background-color: rgba(214, 158, 46, 0.2);
+            color: var(--warning);
+            border: 2px solid var(--warning);
+            animation: shake 0.5s ease infinite;
+        }
+
+        .status-danger {
+            background-color: rgba(229, 62, 62, 0.2);
+            color: var(--danger);
+            border: 2px solid var(--danger);
+            animation: shake 0.3s ease infinite;
+        }
+
+        .output-values {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+        }
+
+        .output-item {
+            text-align: center;
+            padding: 1rem;
+            background-color: rgba(56, 178, 172, 0.1);
+            border-radius: var(--radius);
+        }
+
+        .output-item .label {
+            font-size: 0.9rem;
+            color: #718096;
+            margin-bottom: 0.5rem;
+        }
+
+        body.dark-mode .output-item .label {
+            color: #cbd5e0;
+        }
+
+        .output-item .value {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: var(--primary);
+        }
+
+        body.dark-mode .output-item .value {
+            color: var(--light);
+        }
+
+        .simulation-tabs {
+            display: flex;
+            margin-bottom: 2rem;
+            border-bottom: 2px solid #e2e8f0;
+        }
+
+        .tab {
+            padding: 1rem 2rem;
+            background: none;
+            border: none;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            color: #718096;
+            transition: var(--transition);
+            position: relative;
+        }
+
+        body.dark-mode .tab {
+            color: #a0aec0;
+        }
+
+        .tab.active {
+            color: var(--accent);
+        }
+
+        .tab.active::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background-color: var(--accent);
+        }
+
+        .simulation-actions {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1.5rem;
+            flex-wrap: wrap;
+        }
+
+        .action-button {
+            flex: 1;
+            min-width: 120px;
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            padding: 0.8rem 1.5rem;
+            border-radius: var(--radius);
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+        }
+
+        .action-button:hover {
+            background-color: #2d3748;
+            transform: translateY(-2px);
+        }
+
+        .action-button.play {
+            background-color: var(--success);
+        }
+
+        .action-button.play:hover {
+            background-color: #38a169;
+        }
+
+        .action-button.pause {
+            background-color: var(--warning);
+        }
+
+        .action-button.pause:hover {
+            background-color: #d69e2e;
+        }
+
+        .action-button.reset {
+            background-color: var(--danger);
+        }
+
+        .action-button.reset:hover {
+            background-color: #c53030;
+        }
+
+        /* Footer */
+        footer {
+            background-color: var(--primary);
+            color: white;
+            padding: 3rem 0 1.5rem;
+            margin-top: 4rem;
+        }
+
+        .footer-content {
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .footer-section {
+            flex: 1;
+            min-width: 250px;
+        }
+
+        .footer-section h3 {
+            font-size: 1.2rem;
+            margin-bottom: 1.5rem;
+            color: var(--accent);
+        }
+
+        .footer-links {
+            list-style: none;
+        }
+
+        .footer-links li {
+            margin-bottom: 0.8rem;
+        }
+
+        .footer-links a {
+            color: #cbd5e0;
+            text-decoration: none;
+            transition: var(--transition);
+        }
+
+        .footer-links a:hover {
+            color: white;
+            padding-left: 5px;
+        }
+
+        .copyright {
+            text-align: center;
+            padding-top: 1.5rem;
+            border-top: 1px solid #2d3748;
+            color: #a0aec0;
+            font-size: 0.9rem;
+        }
+
+        /* Animations */
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes moveCar {
+            0% {
+                left: 0;
+                transform: translateX(0);
+            }
+            50% {
+                left: 50%;
+                transform: translateX(-50%);
+            }
+            100% {
+                left: 100%;
+                transform: translateX(-100%);
+            }
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-2px); }
+            75% { transform: translateX(2px); }
+        }
+
+        @keyframes wheelRotation {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+            
+            .nav-links {
+                display: none;
+            }
+            
+            .mobile-menu-btn {
+                display: block;
+                background: none;
+                border: none;
+                color: white;
+                font-size: 1.5rem;
+                cursor: pointer;
+            }
+            
+            .section-title {
+                font-size: 2rem;
+            }
+            
+            .simulation-container {
+                gap: 1.5rem;
+            }
+        }
+
+        /* Tooltips */
+        .tooltip {
+            position: relative;
+            display: inline-block;
+            cursor: help;
+        }
+
+        .tooltip .tooltiptext {
+            visibility: hidden;
+            width: 200px;
+            background-color: var(--secondary);
+            color: white;
+            text-align: center;
+            border-radius: var(--radius);
+            padding: 0.5rem;
+            position: absolute;
+            z-index: 1;
+            bottom: 125%;
+            left: 50%;
+            margin-left: -100px;
+            opacity: 0;
+            transition: opacity 0.3s;
+            font-size: 0.9rem;
+            font-weight: normal;
+        }
+
+        .tooltip:hover .tooltiptext {
+            visibility: visible;
+            opacity: 1;
+        }
+
+        /* Learn Mode */
+        .learn-mode {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 1.5rem;
+            color: var(--accent);
+            font-weight: 600;
+        }
+
+        .learn-mode input {
+            width: 18px;
+            height: 18px;
+        }
+
+        .explanation-box {
+            background-color: rgba(56, 178, 172, 0.1);
+            border-left: 4px solid var(--accent);
+            padding: 1rem;
+            border-radius: 0 var(--radius) var(--radius) 0;
+            margin-top: 1rem;
+            display: none;
+        }
+
+        .explanation-box.show {
+            display: block;
+            animation: fadeIn 0.5s ease;
+        }
+
+        /* Velocity Control */
+        .velocity-control {
+            background-color: rgba(56, 178, 172, 0.1);
+            padding: 1rem;
+            border-radius: var(--radius);
+            margin-top: 1rem;
+        }
+
+        .velocity-control label {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+        }
+
+        .velocity-indicator {
+            text-align: center;
+            padding: 0.5rem;
+            background-color: rgba(56, 178, 172, 0.2);
+            border-radius: var(--radius);
+            margin-top: 0.5rem;
+            font-weight: bold;
+        }
+
+        .velocity-positive {
+            color: var(--success);
+        }
+
+        .velocity-negative {
+            color: var(--danger);
+        }
+
+        .velocity-zero {
+            color: var(--warning);
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="container">
+            <nav>
+                <div class="logo">
+                    <i class="fas fa-balance-scale"></i>
+                    <span>Fisika Transportasi</span>
+                </div>
+                <ul class="nav-links">
+                    <li><a href="#beranda">Beranda</a></li>
+                    <li><a href="#teori">Materi Teori</a></li>
+                    <li><a href="#simulasi">Simulasi</a></li>
+                </ul>
+                <button class="theme-toggle" id="themeToggle">
+                    <i class="fas fa-moon"></i>
+                </button>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section id="beranda" class="hero">
+        <div class="container">
+            <div class="hero-content">
+                <h1>Keseimbangan dalam Fisika Transportasi</h1>
+                <h2>Memahami stabilitas kendaraan melalui gaya, torsi, dan titik berat</h2>
+                
+                <div class="vehicle-animation">
+                    <div class="road"></div>
+                    <div class="car">
+                        <div class="wheel front"></div>
+                        <div class="wheel back"></div>
+                    </div>
+                </div>
+                
+                <a href="#simulasi" class="cta-button">Mulai Simulasi</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Theory Section -->
+    <section id="teori" class="theory">
+        <div class="container">
+            <h2 class="section-title">Materi Teori Fisika</h2>
+            
+            <div class="theory-grid">
+                <!-- Card 1 -->
+                <div class="theory-card">
+                    <h3><i class="fas fa-pause-circle"></i> Keseimbangan Statis</h3>
+                    <p>Keseimbangan statis terjadi ketika benda dalam keadaan diam. Syaratnya:</p>
+                    <div class="formula">ΣF = 0 (Resultan gaya = 0)</div>
+                    <div class="formula">Στ = 0 (Resultan momen = 0)</div>
+                    <p>Contoh: mobil berhenti di tanjakan dengan rem tangan ditarik.</p>
+                </div>
+                
+                <!-- Card 2 -->
+                <div class="theory-card">
+                    <h3><i class="fas fa-tachometer-alt"></i> Keseimbangan Dinamis</h3>
+                    <p>Keseimbangan dinamis terjadi ketika benda bergerak dengan kecepatan konstan.</p>
+                    <div class="formula">a = 0 (Percepatan = 0)</div>
+                    <p>Pada kendaraan, ini berarti gaya dorong mesin sama dengan gaya hambat (gesekan, angin, dll).</p>
+                </div>
+                
+                <!-- Card 3 -->
+                <div class="theory-card">
+                    <h3><i class="fas fa-weight-hanging"></i> Gaya-Gaya pada Kendaraan</h3>
+                    <p>Berbagai gaya bekerja pada kendaraan:</p>
+                    <ul>
+                        <li><strong>Gaya berat (W):</strong> ke bawah, menuju pusat bumi</li>
+                        <li><strong>Gaya normal (N):</strong> ke atas, tegak lurus permukaan</li>
+                        <li><strong>Gaya gesek (f):</strong> sejajar permukaan, melawan gerak</li>
+                        <li><strong>Gaya dorong mesin:</strong> penggerak kendaraan</li>
+                    </ul>
+                </div>
+                
+                <!-- Card 4 -->
+                <div class="theory-card">
+                    <h3><i class="fas fa-sync-alt"></i> Momen Gaya (Torsi)</h3>
+                    <p>Momen gaya atau torsi adalah ukuran kecenderungan gaya untuk memutar benda.</p>
+                    <div class="formula">τ = F × r × sin(θ)</div>
+                    <p>Di mana: τ = torsi, F = gaya, r = jarak ke sumbu rotasi, θ = sudut antara F dan r.</p>
+                </div>
+                
+                <!-- Card 5 -->
+                <div class="theory-card">
+                    <h3><i class="fas fa-bullseye"></i> Titik Berat</h3>
+                    <p>Titik berat adalah titik di mana gaya berat benda terkonsentrasi.</p>
+                    <p>Posisi titik berat mempengaruhi stabilitas kendaraan. Semakin tinggi titik berat, semakin mudah terguling.</p>
+                    <p>Pergeseran beban mengubah posisi titik berat dan mempengaruhi keseimbangan.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Simulation Section -->
+    <section id="simulasi" class="simulation">
+        <div class="container">
+            <h2 class="section-title">Simulasi Interaktif</h2>
+            
+            <div class="simulation-tabs">
+                <button class="tab active" id="tabFlat">Mobil di Jalan Datar</button>
+                <button class="tab" id="tabInclined">Mobil di Jalan Miring</button>
+                <button class="tab" id="tabMoving">Mobil Berjalan</button>
+            </div>
+            
+            <!-- Learn Mode Toggle -->
+            <div class="learn-mode">
+                <input type="checkbox" id="learnMode">
+                <label for="learnMode">Mode Belajar (Penjelasan otomatis)</label>
+            </div>
+            
+            <div class="simulation-container">
+                <!-- Simulation Area -->
+                <div class="simulation-area">
+                    <div class="canvas-container">
+                        <canvas id="simulationCanvas" width="800" height="400"></canvas>
+                    </div>
+                    
+                    <!-- Velocity Indicator -->
+                    <div class="velocity-control">
+                        <label>
+                            Kecepatan Kendaraan
+                            <span class="tooltip">
+                                <i class="fas fa-info-circle"></i>
+                                <span class="tooltiptext">Kecepatan kendaraan dalam km/jam. Nilai positif = maju, negatif = mundur</span>
+                            </span>
+                        </label>
+                        <div class="slider-container">
+                            <input type="range" id="velocitySlider" min="-50" max="50" value="0" step="5">
+                            <input type="number" id="velocityInput" min="-50" max="50" value="0" step="5">
+                        </div>
+                        <div class="velocity-indicator">
+                            <span id="velocityValue">0 km/jam</span>
+                            <span id="velocityStatus" class="velocity-zero"> (Diam)</span>
+                        </div>
+                    </div>
+                    
+                    <!-- Explanation Box (shown in learn mode) -->
+                    <div class="explanation-box" id="explanationBox">
+                        <p id="explanationText">Simulasi menunjukkan mobil di jalan datar. Gaya berat (biru) diimbangi oleh gaya normal (hijau), sehingga mobil dalam keadaan seimbang.</p>
+                    </div>
+                </div>
+                
+                <!-- Controls -->
+                <div class="simulation-controls">
+                    <div class="control-group">
+                        <label for="massSlider">
+                            Massa Kendaraan: <span id="massValue">1500</span> kg
+                            <span class="tooltip">
+                                <i class="fas fa-info-circle"></i>
+                                <span class="tooltiptext">Massa total kendaraan termasuk penumpang dan barang</span>
+                            </span>
+                        </label>
+                        <div class="slider-container">
+                            <input type="range" id="massSlider" min="500" max="3000" value="1500" step="100">
+                            <input type="number" id="massInput" min="500" max="3000" value="1500" step="100">
+                        </div>
+                    </div>
+                    
+                    <div class="control-group" id="angleControl">
+                        <label for="angleSlider">
+                            Sudut Kemiringan: <span id="angleValue">0</span>°
+                            <span class="tooltip">
+                                <i class="fas fa-info-circle"></i>
+                                <span class="tooltiptext">Sudut kemiringan jalan terhadap horizontal (0° = datar, 30° = sangat curam)</span>
+                            </span>
+                        </label>
+                        <div class="slider-container">
+                            <input type="range" id="angleSlider" min="0" max="30" value="0" step="1">
+                            <input type="number" id="angleInput" min="0" max="30" value="0" step="1">
+                        </div>
+                    </div>
+                    
+                    <div class="control-group">
+                        <label>
+                            Posisi Beban
+                            <span class="tooltip">
+                                <i class="fas fa-info-circle"></i>
+                                <span class="tooltiptext">Posisi beban dalam kendaraan mempengaruhi titik berat</span>
+                            </span>
+                        </label>
+                        <div class="radio-group">
+                            <div class="radio-option">
+                                <input type="radio" id="loadFront" name="loadPosition" value="front" checked>
+                                <label for="loadFront">Depan</label>
+                            </div>
+                            <div class="radio-option">
+                                <input type="radio" id="loadCenter" name="loadPosition" value="center">
+                                <label for="loadCenter">Tengah</label>
+                            </div>
+                            <div class="radio-option">
+                                <input type="radio" id="loadRear" name="loadPosition" value="rear">
+                                <label for="loadRear">Belakang</label>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="control-group">
+                        <label for="frictionSlider">
+                            Koefisien Gesek: <span id="frictionValue">0.6</span>
+                            <span class="tooltip">
+                                <i class="fas fa-info-circle"></i>
+                                <span class="tooltiptext">Koefisien gesek statis antara ban dan jalan (0 = licin, 1 = sangat kasar)</span>
+                            </span>
+                        </label>
+                        <div class="slider-container">
+                            <input type="range" id="frictionSlider" min="0.1" max="1.0" value="0.6" step="0.05">
+                            <input type="number" id="frictionInput" min="0.1" max="1.0" value="0.6" step="0.05">
+                        </div>
+                    </div>
+                    
+                    <!-- Action Buttons -->
+                    <div class="simulation-actions">
+                        <button class="action-button play" id="playButton">
+                            <i class="fas fa-play"></i> Mulai
+                        </button>
+                        <button class="action-button pause" id="pauseButton">
+                            <i class="fas fa-pause"></i> Jeda
+                        </button>
+                        <button class="action-button reset" id="resetButton">
+                            <i class="fas fa-redo"></i> Reset
+                        </button>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Output -->
+            <div class="simulation-output">
+                <div class="status-indicator" id="statusIndicator">
+                    <i class="fas fa-check-circle"></i>
+                    <span>SEIMBANG</span>
+                </div>
+                
+                <div class="output-values">
+                    <div class="output-item">
+                        <div class="label">Resultan Gaya (N)</div>
+                        <div class="value" id="netForceValue">0</div>
+                    </div>
+                    <div class="output-item">
+                        <div class="label">Resultan Momen (Nm)</div>
+                        <div class="value" id="netTorqueValue">0</div>
+                    </div>
+                    <div class="output-item">
+                        <div class="label">Gaya Gesek Maksimum (N)</div>
+                        <div class="value" id="maxFrictionValue">8829</div>
+                    </div>
+                    <div class="output-item">
+                        <div class="label">Gaya Berat Sejajar (N)</div>
+                        <div class="value" id="parallelWeightValue">0</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>Keseimbangan dalam Fisika Transportasi</h3>
+                    <p>Website edukasi interaktif untuk memahami konsep fisika keseimbangan yang diterapkan pada transportasi darat.</p>
+                </div>
+                
+                <div class="footer-section">
+                    <h3>Navigasi</h3>
+                    <ul class="footer-links">
+                        <li><a href="#beranda">Beranda</a></li>
+                        <li><a href="#teori">Materi Teori</a></li>
+                        <li><a href="#simulasi">Simulasi Interaktif</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-section">
+                    <h3>Konsep Fisika</h3>
+                    <ul class="footer-links">
+                        <li><a href="#teori">Keseimbangan Statis & Dinamis</a></li>
+                        <li><a href="#teori">Gaya-Gaya pada Kendaraan</a></li>
+                        <li><a href="#teori">Momen Gaya (Torsi)</a></li>
+                        <li><a href="#teori">Titik Berat dan Stabilitas</a></li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="copyright">
+                &copy; 2023 Keseimbangan dalam Fisika Transportasi. Dibuat untuk tujuan edukasi.
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Global variables
+        let canvas, ctx;
+        let currentTab = 'flat';
+        let learnMode = false;
+        let lastExplanationTime = 0;
+        let isShaking = false;
+        let animationId = null;
+        let isPlaying = false;
+        let carX = 0; // Position of the car
+        let carVelocity = 0; // Velocity in km/h
+        let wheelRotation = 0; // Wheel rotation angle
+        let lastTimestamp = 0;
+        
+        // Physics parameters
+        let params = {
+            mass: 1500, // kg
+            angle: 0, // degrees
+            loadPosition: 'front', // front, center, rear
+            friction: 0.6,
+            gravity: 9.8, // m/s²
+            carWidth: 160,
+            carHeight: 80,
+            wheelRadius: 15,
+            wheelBase: 120
+        };
+        
+        // Calculated values
+        let calculated = {
+            weight: 0,
+            normalForce: 0,
+            frictionForce: 0,
+            maxFriction: 0,
+            netForce: 0,
+            netTorque: 0,
+            parallelWeight: 0,
+            perpendicularWeight: 0,
+            status: 'balanced' // balanced, warning, danger
+        };
+        
+        // Initialize when page loads
+        document.addEventListener('DOMContentLoaded', function() {
+            // Get canvas and context
+            canvas = document.getElementById('simulationCanvas');
+            ctx = canvas.getContext('2d');
+            
+            // Set initial canvas size
+            resizeCanvas();
+            
+            // Initialize event listeners
+            initEventListeners();
+            
+            // Calculate initial values
+            calculatePhysics();
+            
+            // Draw initial simulation
+            drawSimulation();
+            
+            // Update output values
+            updateOutput();
+            
+            // Start animation loop
+            startAnimation();
+        });
+        
+        // Resize canvas to fit container
+        function resizeCanvas() {
+            const container = canvas.parentElement;
+            canvas.width = container.clientWidth;
+            canvas.height = container.clientHeight;
+        }
+        
+        // Initialize all event listeners
+        function initEventListeners() {
+            // Theme toggle
+            document.getElementById('themeToggle').addEventListener('click', toggleTheme);
+            
+            // Tab switching
+            document.getElementById('tabFlat').addEventListener('click', () => switchTab('flat'));
+            document.getElementById('tabInclined').addEventListener('click', () => switchTab('inclined'));
+            document.getElementById('tabMoving').addEventListener('click', () => switchTab('moving'));
+            
+            // Learn mode toggle
+            document.getElementById('learnMode').addEventListener('change', function() {
+                learnMode = this.checked;
+                const explanationBox = document.getElementById('explanationBox');
+                if (learnMode) {
+                    explanationBox.classList.add('show');
+                    showExplanation("Mode belajar diaktifkan. Simulasi akan memberikan penjelasan tentang apa yang terjadi.");
+                } else {
+                    explanationBox.classList.remove('show');
+                }
+            });
+            
+            // Slider and input controls
+            initControl('massSlider', 'massInput', 'massValue', value => {
+                params.mass = parseInt(value);
+                calculatePhysics();
+                updateOutput();
+            });
+            
+            initControl('angleSlider', 'angleInput', 'angleValue', value => {
+                params.angle = parseInt(value);
+                calculatePhysics();
+                updateOutput();
+            });
+            
+            initControl('frictionSlider', 'frictionInput', 'frictionValue', value => {
+                params.friction = parseFloat(value);
+                calculatePhysics();
+                updateOutput();
+            });
+            
+            // Velocity control
+            initControl('velocitySlider', 'velocityInput', 'velocityValue', value => {
+                carVelocity = parseInt(value);
+                updateVelocityDisplay();
+                
+                // If velocity is not 0, automatically play
+                if (carVelocity !== 0 && !isPlaying) {
+                    playSimulation();
+                }
+            });
+            
+            // Load position radio buttons
+            document.querySelectorAll('input[name="loadPosition"]').forEach(radio => {
+                radio.addEventListener('change', function() {
+                    if (this.checked) {
+                        params.loadPosition = this.value;
+                        calculatePhysics();
+                        updateOutput();
+                    }
+                });
+            });
+            
+            // Action buttons
+            document.getElementById('playButton').addEventListener('click', playSimulation);
+            document.getElementById('pauseButton').addEventListener('click', pauseSimulation);
+            document.getElementById('resetButton').addEventListener('click', resetSimulation);
+            
+            // Window resize
+            window.addEventListener('resize', function() {
+                resizeCanvas();
+                drawSimulation();
+            });
+            
+            // Smooth scroll for anchor links
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    
+                    const targetId = this.getAttribute('href');
+                    if (targetId === '#') return;
+                    
+                    const targetElement = document.querySelector(targetId);
+                    if (targetElement) {
+                        window.scrollTo({
+                            top: targetElement.offsetTop - 80,
+                            behavior: 'smooth'
+                        });
+                    }
+                });
+            });
+        }
+        
+        // Initialize a control with slider and input
+        function initControl(sliderId, inputId, valueSpanId, onChange) {
+            const slider = document.getElementById(sliderId);
+            const input = document.getElementById(inputId);
+            const valueSpan = document.getElementById(valueSpanId);
+            
+            slider.addEventListener('input', function() {
+                input.value = this.value;
+                valueSpan.textContent = this.value;
+                onChange(this.value);
+            });
+            
+            input.addEventListener('change', function() {
+                // Clamp value to min/max
+                const min = parseFloat(slider.min);
+                const max = parseFloat(slider.max);
+                let value = parseFloat(this.value);
+                
+                if (value < min) value = min;
+                if (value > max) value = max;
+                
+                this.value = value;
+                slider.value = value;
+                valueSpan.textContent = value;
+                onChange(value);
+            });
+        }
+        
+        // Update velocity display
+        function updateVelocityDisplay() {
+            const velocityStatus = document.getElementById('velocityStatus');
+            velocityStatus.textContent = carVelocity > 0 ? ` (Maju)` : carVelocity < 0 ? ` (Mundur)` : ` (Diam)`;
+            velocityStatus.className = carVelocity > 0 ? 'velocity-positive' : carVelocity < 0 ? 'velocity-negative' : 'velocity-zero';
+            
+            // Update velocity value display
+            document.getElementById('velocityValue').textContent = `${Math.abs(carVelocity)} km/jam`;
+        }
+        
+        // Toggle dark/light mode
+        function toggleTheme() {
+            document.body.classList.toggle('dark-mode');
+            const icon = document.querySelector('#themeToggle i');
+            
+            if (document.body.classList.contains('dark-mode')) {
+                icon.classList.remove('fa-moon');
+                icon.classList.add('fa-sun');
+            } else {
+                icon.classList.remove('fa-sun');
+                icon.classList.add('fa-moon');
+            }
+            
+            // Redraw simulation to update colors
+            drawSimulation();
+        }
+        
+        // Switch between tabs
+        function switchTab(tab) {
+            currentTab = tab;
+            
+            // Update active tab styling
+            document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+            if (tab === 'flat') {
+                document.getElementById('tabFlat').classList.add('active');
+                document.getElementById('angleControl').style.display = 'block';
+                params.angle = 0;
+                document.getElementById('angleSlider').value = 0;
+                document.getElementById('angleInput').value = 0;
+                document.getElementById('angleValue').textContent = '0';
+                
+                // Reset car position for flat road
+                carX = 0;
+            } else if (tab === 'inclined') {
+                document.getElementById('tabInclined').classList.add('active');
+                document.getElementById('angleControl').style.display = 'block';
+                
+                // Reset car position for inclined road
+                carX = 0;
+            } else if (tab === 'moving') {
+                document.getElementById('tabMoving').classList.add('active');
+                document.getElementById('angleControl').style.display = 'none';
+                params.angle = 0;
+                
+                // Set default velocity for moving tab
+                if (carVelocity === 0) {
+                    carVelocity = 20;
+                    document.getElementById('velocitySlider').value = 20;
+                    document.getElementById('velocityInput').value = 20;
+                    updateVelocityDisplay();
+                }
+            }
+            
+            calculatePhysics();
+            updateOutput();
+            drawSimulation();
+            
+            if (learnMode) {
+                let explanation = "";
+                if (tab === 'flat') {
+                    explanation = "Simulasi mobil di jalan datar. Gaya berat (biru) diimbangi oleh gaya normal (hijau), sehingga mobil dalam keadaan seimbang.";
+                } else if (tab === 'inclined') {
+                    explanation = "Simulasi mobil di jalan miring. Gaya berat terurai menjadi dua komponen: sejajar jalan (merah) dan tegak lurus jalan (biru).";
+                } else {
+                    explanation = "Simulasi mobil berjalan. Mobil bergerak dengan kecepatan konstan, menunjukkan keseimbangan dinamis.";
+                }
+                showExplanation(explanation);
+            }
+        }
+        
+        // Calculate physics based on current parameters
+        function calculatePhysics() {
+            // Calculate weight
+            calculated.weight = params.mass * params.gravity;
+            
+            // Convert angle to radians
+            const angleRad = params.angle * Math.PI / 180;
+            
+            // Calculate weight components on inclined plane
+            calculated.parallelWeight = calculated.weight * Math.sin(angleRad);
+            calculated.perpendicularWeight = calculated.weight * Math.cos(angleRad);
+            
+            // For flat road, normal force equals weight
+            // For inclined road, normal force equals perpendicular component
+            calculated.normalForce = calculated.perpendicularWeight;
+            
+            // Maximum static friction
+            calculated.maxFriction = params.friction * calculated.normalForce;
+            
+            // For moving car, we need to consider kinetic friction
+            if (currentTab === 'moving' && carVelocity !== 0) {
+                // Kinetic friction is usually lower than static friction
+                const kineticFriction = params.friction * 0.8;
+                calculated.maxFriction = kineticFriction * calculated.normalForce;
+                
+                // When moving, friction opposes motion
+                calculated.frictionForce = Math.min(calculated.parallelWeight, calculated.maxFriction);
+                
+                // For moving on flat road at constant velocity, engine force equals friction
+                if (params.angle === 0) {
+                    calculated.frictionForce = calculated.maxFriction * 0.5;
+                }
+            } else {
+                // Static friction for stationary or about to move
+                calculated.frictionForce = Math.min(calculated.parallelWeight, calculated.maxFriction);
+            }
+            
+            // Net force (should be 0 for equilibrium)
+            calculated.netForce = calculated.parallelWeight - calculated.frictionForce;
+            
+            // Calculate torque based on load position
+            let centerOfMassOffset = 0;
+            switch(params.loadPosition) {
+                case 'front':
+                    centerOfMassOffset = -30; // Toward front
+                    break;
+                case 'rear':
+                    centerOfMassOffset = 30; // Toward rear
+                    break;
+                default: // center
+                    centerOfMassOffset = 0;
+            }
+            
+            // Torque calculation (simplified)
+            calculated.netTorque = calculated.parallelWeight * (params.carHeight/2 + params.wheelRadius) / 100;
+            
+            // Adjust torque based on load position
+            if (params.loadPosition === 'front') calculated.netTorque *= 0.7;
+            if (params.loadPosition === 'rear') calculated.netTorque *= 1.3;
+            
+            // Determine status
+            const frictionRatio = calculated.parallelWeight / calculated.maxFriction;
+            
+            // For moving car, status depends on whether it can maintain constant velocity
+            if (currentTab === 'moving' && carVelocity !== 0) {
+                if (Math.abs(calculated.netForce) < 100) {
+                    calculated.status = 'balanced';
+                    isShaking = false;
+                } else if (frictionRatio > 0.8) {
+                    calculated.status = 'warning';
+                    isShaking = true;
+                } else {
+                    calculated.status = 'danger';
+                    isShaking = true;
+                }
+            } else {
+                // For stationary car
+                if (Math.abs(calculated.netForce) < 0.1 && Math.abs(calculated.netTorque) < 10) {
+                    calculated.status = 'balanced';
+                    isShaking = false;
+                } else if (frictionRatio > 0.8 && frictionRatio < 1.0) {
+                    calculated.status = 'warning';
+                    isShaking = true;
+                } else {
+                    calculated.status = 'danger';
+                    isShaking = true;
+                }
+            }
+        }
+        
+        // Update output display
+        function updateOutput() {
+            // Update status indicator
+            const statusIndicator = document.getElementById('statusIndicator');
+            statusIndicator.className = 'status-indicator';
+            
+            let statusText = '';
+            let statusIcon = '';
+            
+            if (currentTab === 'moving' && carVelocity !== 0) {
+                if (calculated.status === 'balanced') {
+                    statusText = 'SEIMBANG DINAMIS';
+                    statusIcon = '<i class="fas fa-check-circle"></i>';
+                    statusIndicator.classList.add('status-balanced');
+                } else if (calculated.status === 'warning') {
+                    statusText = 'KEHILANGAN GRIP';
+                    statusIcon = '<i class="fas fa-exclamation-triangle"></i>';
+                    statusIndicator.classList.add('status-warning');
+                } else {
+                    statusText = 'TERGELINCIR';
+                    statusIcon = '<i class="fas fa-times-circle"></i>';
+                    statusIndicator.classList.add('status-danger');
+                }
+            } else {
+                if (calculated.status === 'balanced') {
+                    statusText = 'SEIMBANG';
+                    statusIcon = '<i class="fas fa-check-circle"></i>';
+                    statusIndicator.classList.add('status-balanced');
+                } else if (calculated.status === 'warning') {
+                    statusText = 'HAMPIR TERGELINCIR';
+                    statusIcon = '<i class="fas fa-exclamation-triangle"></i>';
+                    statusIndicator.classList.add('status-warning');
+                } else {
+                    statusText = 'TIDAK SEIMBANG';
+                    statusIcon = '<i class="fas fa-times-circle"></i>';
+                    statusIndicator.classList.add('status-danger');
+                }
+            }
+            
+            statusIndicator.innerHTML = statusIcon + '<span>' + statusText + '</span>';
+            
+            // Update values
+            document.getElementById('netForceValue').textContent = calculated.netForce.toFixed(2);
+            document.getElementById('netTorqueValue').textContent = calculated.netTorque.toFixed(2);
+            document.getElementById('maxFrictionValue').textContent = calculated.maxFriction.toFixed(0);
+            document.getElementById('parallelWeightValue').textContent = calculated.parallelWeight.toFixed(2);
+            
+            // Show explanation in learn mode if status changed
+            if (learnMode) {
+                const now = Date.now();
+                if (now - lastExplanationTime > 3000) { // Throttle explanations
+                    let explanation = "";
+                    
+                    if (currentTab === 'flat') {
+                        explanation = "Mobil di jalan datar. Gaya berat (" + calculated.weight.toFixed(0) + " N) diimbangi oleh gaya normal. ";
+                        
+                        if (calculated.status === 'balanced') {
+                            explanation += "Mobil dalam keadaan seimbang sempurna.";
+                        } else {
+                            explanation += "Meskipun di jalan datar, posisi beban yang tidak tepat dapat menyebabkan ketidakseimbangan.";
+                        }
+                    } else if (currentTab === 'inclined') {
+                        explanation = "Mobil di jalan miring " + params.angle + "°. ";
+                        explanation += "Gaya berat terurai menjadi komponen sejajar (" + calculated.parallelWeight.toFixed(0) + " N) dan tegak lurus (" + calculated.perpendicularWeight.toFixed(0) + " N). ";
+                        
+                        if (calculated.status === 'balanced') {
+                            explanation += "Gaya gesek cukup besar untuk menahan mobil agar tidak tergelincir.";
+                        } else if (calculated.status === 'warning') {
+                            explanation += "Gaya gesek hampir tidak cukup. Mobil berisiko tergelincir jika sudut diperbesar.";
+                        } else {
+                            explanation += "Gaya gesek tidak cukup. Mobil akan tergelincir atau bahkan terguling.";
+                        }
+                    } else if (currentTab === 'moving') {
+                        explanation = "Mobil bergerak dengan kecepatan " + Math.abs(carVelocity) + " km/jam. ";
+                        
+                        if (calculated.status === 'balanced') {
+                            explanation += "Mobil dalam keseimbangan dinamis. Gaya dorong mesin seimbang dengan gaya hambat.";
+                        } else if (calculated.status === 'warning') {
+                            explanation += "Mobil mulai kehilangan grip. Pengemudi perlu mengurangi kecepatan.";
+                        } else {
+                            explanation += "Mobil tergelincir! Gaya gesek tidak cukup untuk menjaga traksi.";
+                        }
+                    }
+                    
+                    showExplanation(explanation);
+                    lastExplanationTime = now;
+                }
+            }
+        }
+        
+        // Show explanation in learn mode
+        function showExplanation(text) {
+            const explanationBox = document.getElementById('explanationBox');
+            const explanationText = document.getElementById('explanationText');
+            
+            explanationText.textContent = text;
+            explanationBox.classList.add('show');
+        }
+        
+        // Start animation loop
+        function startAnimation() {
+            if (animationId) {
+                cancelAnimationFrame(animationId);
+            }
+            
+            function animate(timestamp) {
+                if (!lastTimestamp) lastTimestamp = timestamp;
+                
+                const deltaTime = (timestamp - lastTimestamp) / 1000; // Convert to seconds
+                lastTimestamp = timestamp;
+                
+                // Update car position if moving
+                if (isPlaying && carVelocity !== 0) {
+                    // Convert km/h to pixels per second (scaled for animation)
+                    const velocityPxPerSec = (carVelocity * 5) / 3.6;
+                    carX += velocityPxPerSec * deltaTime;
+                    
+                    // Update wheel rotation
+                    wheelRotation += (velocityPxPerSec / params.wheelRadius) * deltaTime;
+                    
+                    // Wrap around when car goes off screen
+                    const canvasWidth = canvas.width;
+                    if (carX > canvasWidth + 200) {
+                        carX = -200;
+                    } else if (carX < -200) {
+                        carX = canvasWidth + 200;
+                    }
+                }
+                
+                // Draw simulation
+                drawSimulation();
+                
+                // Continue animation loop
+                animationId = requestAnimationFrame(animate);
+            }
+            
+            animationId = requestAnimationFrame(animate);
+        }
+        
+        // Draw the simulation
+        function drawSimulation() {
+            // Clear canvas
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            
+            // Set drawing parameters based on theme
+            const isDarkMode = document.body.classList.contains('dark-mode');
+            const roadColor = isDarkMode ? '#4a5568' : '#a0aec0';
+            const carColor = isDarkMode ? '#38b2ac' : '#2c7a7b';
+            const wheelColor = isDarkMode ? '#2d3748' : '#4a5568';
+            const textColor = isDarkMode ? '#f7fafc' : '#1a202c';
+            
+            // Calculate drawing parameters
+            const centerX = canvas.width / 2;
+            const centerY = canvas.height / 2;
+            
+            // Draw road
+            ctx.save();
+            
+            // For moving car, translate based on car position
+            if (currentTab === 'moving' && carVelocity !== 0) {
+                // Create infinite road effect
+                const roadLength = canvas.width * 2;
+                const roadOffset = carX % roadLength;
+                ctx.translate(centerX - roadOffset, centerY + 80);
+                
+                // Draw multiple road segments for infinite effect
+                for (let i = -1; i <= 1; i++) {
+                    drawRoadSegment(ctx, roadColor, isDarkMode, i * roadLength);
+                }
+            } else {
+                // Static road
+                ctx.translate(centerX - 200, centerY + 80);
+                drawRoadSegment(ctx, roadColor, isDarkMode, 0);
+            }
+            
+            // Rotate for inclined road
+            if (currentTab === 'inclined') {
+                const angleRad = params.angle * Math.PI / 180;
+                ctx.rotate(-angleRad);
+            }
+            
+            // Draw car
+            drawCar(ctx, carColor, wheelColor, isDarkMode);
+            
+            // Draw force vectors (only if not moving fast)
+            if (currentTab !== 'moving' || Math.abs(carVelocity) < 10) {
+                drawForceVectors(ctx, isDarkMode);
+            }
+            
+            ctx.restore();
+            
+            // Draw labels
+            ctx.fillStyle = textColor;
+            ctx.font = '16px Arial';
+            ctx.textAlign = 'center';
+            
+            if (currentTab === 'flat') {
+                ctx.fillText('Mobil di Jalan Datar', centerX, 30);
+            } else if (currentTab === 'inclined') {
+                ctx.fillText(`Mobil di Jalan Miring (${params.angle}°)`, centerX, 30);
+            } else {
+                ctx.fillText(`Mobil Berjalan (${Math.abs(carVelocity)} km/jam)`, centerX, 30);
+            }
+            
+            // Draw angle indicator for inclined road
+            if (currentTab === 'inclined' && params.angle > 0) {
+                drawAngleIndicator(ctx, centerX, centerY, params.angle, isDarkMode);
+            }
+        }
+        
+        // Draw a road segment
+        function drawRoadSegment(ctx, roadColor, isDarkMode, offsetX) {
+            ctx.save();
+            ctx.translate(offsetX, 0);
+            
+            // Road surface
+            ctx.fillStyle = roadColor;
+            ctx.fillRect(-200, 0, 800, 20);
+            
+            // Road markings
+            ctx.strokeStyle = isDarkMode ? '#e2e8f0' : '#f7fafc';
+            ctx.lineWidth = 2;
+            ctx.setLineDash([20, 15]);
+            ctx.beginPath();
+            ctx.moveTo(-200, 10);
+            ctx.lineTo(600, 10);
+            ctx.stroke();
+            ctx.setLineDash([]);
+            
+            ctx.restore();
+        }
+        
+        // Draw the car
+        function drawCar(ctx, carColor, wheelColor, isDarkMode) {
+            const carWidth = params.carWidth;
+            const carHeight = params.carHeight;
+            const wheelRadius = params.wheelRadius;
+            const wheelBase = params.wheelBase;
+            
+            // Car body
+            ctx.fillStyle = carColor;
+            ctx.fillRect(-carWidth/2, -carHeight, carWidth, carHeight);
+            
+            // Car windows
+            ctx.fillStyle = isDarkMode ? 'rgba(255,255,255,0.2)' : 'rgba(255,255,255,0.5)';
+            ctx.fillRect(-carWidth/2 + 10, -carHeight + 10, carWidth/2 - 15, carHeight/2 - 10);
+            ctx.fillRect(10, -carHeight + 10, carWidth/2 - 20, carHeight/2 - 10);
+            
+            // Wheels with rotation
+            ctx.fillStyle = wheelColor;
+            
+            // Front wheel
+            ctx.save();
+            ctx.translate(-wheelBase/2, 0);
+            if (currentTab === 'moving' && carVelocity !== 0) {
+                ctx.rotate(wheelRotation);
+            }
+            ctx.beginPath();
+            ctx.arc(0, 0, wheelRadius, 0, Math.PI * 2);
+            ctx.fill();
+            
+            // Wheel spokes
+            ctx.strokeStyle = isDarkMode ? '#718096' : '#a0aec0';
+            ctx.lineWidth = 2;
+            for (let i = 0; i < 4; i++) {
+                const angle = (Math.PI / 2) * i;
+                ctx.beginPath();
+                ctx.moveTo(0, 0);
+                ctx.lineTo(Math.cos(angle) * wheelRadius, Math.sin(angle) * wheelRadius);
+                ctx.stroke();
+            }
+            ctx.restore();
+            
+            // Rear wheel
+            ctx.save();
+            ctx.translate(wheelBase/2, 0);
+            if (currentTab === 'moving' && carVelocity !== 0) {
+                ctx.rotate(wheelRotation);
+            }
+            ctx.beginPath();
+            ctx.arc(0, 0, wheelRadius, 0, Math.PI * 2);
+            ctx.fill();
+            
+            // Wheel spokes
+            ctx.strokeStyle = isDarkMode ? '#718096' : '#a0aec0';
+            ctx.lineWidth = 2;
+            for (let i = 0; i < 4; i++) {
+                const angle = (Math.PI / 2) * i;
+                ctx.beginPath();
+                ctx.moveTo(0, 0);
+                ctx.lineTo(Math.cos(angle) * wheelRadius, Math.sin(angle) * wheelRadius);
+                ctx.stroke();
+            }
+            ctx.restore();
+            
+            // Center of mass indicator based on load position
+            let comX = 0;
+            let comY = -carHeight/2;
+            
+            switch(params.loadPosition) {
+                case 'front':
+                    comX = -carWidth/4;
+                    break;
+                case 'rear':
+                    comX = carWidth/4;
+                    break;
+                default: // center
+                    comX = 0;
+            }
+            
+            // Draw center of mass
+            ctx.fillStyle = '#e53e3e';
+            ctx.beginPath();
+            ctx.arc(comX, comY, 8, 0, Math.PI * 2);
+            ctx.fill();
+            
+            // Draw center of mass label (only if not moving fast)
+            if (currentTab !== 'moving' || Math.abs(carVelocity) < 10) {
+                ctx.fillStyle = isDarkMode ? '#f7fafc' : '#1a202c';
+                ctx.font = '12px Arial';
+                ctx.textAlign = 'center';
+                ctx.fillText('Titik Berat', comX, comY - 15);
+            }
+        }
+        
+        // Draw force vectors
+        function drawForceVectors(ctx, isDarkMode) {
+            const scale = 0.01; // Scale factor for force vectors
+            const carHeight = params.carHeight;
+            const wheelBase = params.wheelBase;
+            
+            // Weight vector (blue)
+            const weightVectorLength = calculated.weight * scale;
+            ctx.strokeStyle = '#3182ce';
+            ctx.fillStyle = '#3182ce';
+            ctx.lineWidth = 3;
+            
+            ctx.beginPath();
+            ctx.moveTo(0, -carHeight/2);
+            ctx.lineTo(0, -carHeight/2 + weightVectorLength);
+            ctx.stroke();
+            
+            // Draw arrowhead
+            drawArrowhead(ctx, 0, -carHeight/2 + weightVectorLength, Math.PI/2, 10);
+            
+            // Weight label
+            ctx.fillText(`W = ${calculated.weight.toFixed(0)} N`, 40, -carHeight/2 + weightVectorLength/2);
+            
+            // Normal force vectors (green)
+            const normalForceLength = calculated.normalForce * scale;
+            ctx.strokeStyle = '#38a169';
+            ctx.fillStyle = '#38a169';
+            
+            // Front wheel normal force
+            ctx.beginPath();
+            ctx.moveTo(-wheelBase/2, 0);
+            ctx.lineTo(-wheelBase/2, -normalForceLength/2);
+            ctx.stroke();
+            
+            // Rear wheel normal force
+            ctx.beginPath();
+            ctx.moveTo(wheelBase/2, 0);
+            ctx.lineTo(wheelBase/2, -normalForceLength/2);
+            ctx.stroke();
+            
+            // Draw arrowheads
+            drawArrowhead(ctx, -wheelBase/2, -normalForceLength/2, Math.PI/2, 8);
+            drawArrowhead(ctx, wheelBase/2, -normalForceLength/2, Math.PI/2, 8);
+            
+            // Normal force label
+            ctx.fillText(`N = ${calculated.normalForce.toFixed(0)} N`, wheelBase/2 + 50, -normalForceLength/4);
+            
+            // For inclined road, draw parallel component and friction
+            if ((currentTab === 'inclined' && params.angle > 0) || (currentTab === 'moving' && carVelocity !== 0)) {
+                const angleRad = params.angle * Math.PI / 180;
+                
+                // Parallel component (red)
+                const parallelLength = calculated.parallelWeight * scale;
+                ctx.strokeStyle = '#e53e3e';
+                ctx.fillStyle = '#e53e3e';
+                
+                ctx.beginPath();
+                ctx.moveTo(0, -carHeight/2);
+                ctx.lineTo(
+                    0 + parallelLength * Math.cos(Math.PI/2 - angleRad),
+                    -carHeight/2 + parallelLength * Math.sin(Math.PI/2 - angleRad)
+                );
+                ctx.stroke();
+                
+                // Draw arrowhead
+                drawArrowhead(
+                    ctx,
+                    0 + parallelLength * Math.cos(Math.PI/2 - angleRad),
+                    -carHeight/2 + parallelLength * Math.sin(Math.PI/2 - angleRad),
+                    Math.PI/2 - angleRad,
+                    10
+                );
+                
+                // Parallel component label
+                ctx.fillText(`W∥ = ${calculated.parallelWeight.toFixed(0)} N`, 
+                    30 + parallelLength * Math.cos(Math.PI/2 - angleRad),
+                    -carHeight/2 + parallelLength * Math.sin(Math.PI/2 - angleRad) / 2
+                );
+                
+                // Friction force (orange) - opposite to parallel component
+                if (calculated.frictionForce > 0) {
+                    const frictionLength = calculated.frictionForce * scale;
+                    ctx.strokeStyle = '#dd6b20';
+                    ctx.fillStyle = '#dd6b20';
+                    
+                    // Friction acts at the wheels, opposite to the direction of potential sliding
+                    ctx.beginPath();
+                    ctx.moveTo(0, -carHeight/3);
+                    ctx.lineTo(
+                        0 - frictionLength * Math.cos(Math.PI/2 - angleRad),
+                        -carHeight/3 - frictionLength * Math.sin(Math.PI/2 - angleRad)
+                    );
+                    ctx.stroke();
+                    
+                    // Draw arrowhead
+                    drawArrowhead(
+                        ctx,
+                        0 - frictionLength * Math.cos(Math.PI/2 - angleRad),
+                        -carHeight/3 - frictionLength * Math.sin(Math.PI/2 - angleRad),
+                        Math.PI/2 - angleRad + Math.PI,
+                        10
+                    );
+                    
+                    // Friction label
+                    ctx.fillText(`f = ${calculated.frictionForce.toFixed(0)} N`, 
+                        -40 - frictionLength * Math.cos(Math.PI/2 - angleRad),
+                        -carHeight/3 - frictionLength * Math.sin(Math.PI/2 - angleRad) / 2
+                    );
+                }
+                
+                // For moving car, draw engine force
+                if (currentTab === 'moving' && carVelocity !== 0) {
+                    const engineForceLength = calculated.frictionForce * scale * 1.2;
+                    ctx.strokeStyle = '#805ad5';
+                    ctx.fillStyle = '#805ad5';
+                    
+                    // Engine force in direction of motion
+                    ctx.beginPath();
+                    ctx.moveTo(0, -carHeight/4);
+                    ctx.lineTo(
+                        0 + engineForceLength * Math.cos(-angleRad),
+                        -carHeight/4 + engineForceLength * Math.sin(-angleRad)
+                    );
+                    ctx.stroke();
+                    
+                    // Draw arrowhead
+                    drawArrowhead(
+                        ctx,
+                        0 + engineForceLength * Math.cos(-angleRad),
+                        -carHeight/4 + engineForceLength * Math.sin(-angleRad),
+                        -angleRad,
+                        10
+                    );
+                    
+                    // Engine force label
+                    ctx.fillText(`Fmesin = ${(calculated.frictionForce * 1.2).toFixed(0)} N`, 
+                        50 + engineForceLength * Math.cos(-angleRad),
+                        -carHeight/4 + engineForceLength * Math.sin(-angleRad) / 2
+                    );
+                }
+            }
+        }
+        
+        // Draw an arrowhead
+        function drawArrowhead(ctx, x, y, angle, size) {
+            ctx.save();
+            ctx.translate(x, y);
+            ctx.rotate(angle);
+            
+            ctx.beginPath();
+            ctx.moveTo(0, 0);
+            ctx.lineTo(-size/2, -size);
+            ctx.lineTo(size/2, -size);
+            ctx.closePath();
+            ctx.fill();
+            
+            ctx.restore();
+        }
+        
+        // Draw angle indicator for inclined road
+        function drawAngleIndicator(ctx, centerX, centerY, angle, isDarkMode) {
+            const radius = 60;
+            const startX = centerX + 250;
+            const startY = centerY + 50;
+            
+            ctx.save();
+            ctx.translate(startX, startY);
+            
+            // Draw arc
+            ctx.strokeStyle = isDarkMode ? '#718096' : '#a0aec0';
+            ctx.lineWidth = 2;
+            ctx.beginPath();
+            ctx.arc(0, 0, radius, 0, -angle * Math.PI / 180, true);
+            ctx.stroke();
+            
+            // Draw angle lines
+            ctx.beginPath();
+            ctx.moveTo(0, 0);
+            ctx.lineTo(radius, 0);
+            ctx.stroke();
+            
+            ctx.beginPath();
+            ctx.moveTo(0, 0);
+            ctx.lineTo(radius * Math.cos(-angle * Math.PI / 180), radius * Math.sin(-angle * Math.PI / 180));
+            ctx.stroke();
+            
+            // Draw angle label
+            ctx.fillStyle = isDarkMode ? '#f7fafc' : '#1a202c';
+            ctx.font = '16px Arial';
+            ctx.textAlign = 'center';
+            ctx.fillText(`θ = ${angle}°`, radius/2 * Math.cos(-angle/2 * Math.PI / 180) + 10, 
+                radius/2 * Math.sin(-angle/2 * Math.PI / 180) - 10);
+            
+            ctx.restore();
+        }
+        
+        // Play simulation
+        function playSimulation() {
+            isPlaying = true;
+            
+            // If velocity is 0, set a default
+            if (carVelocity === 0) {
+                carVelocity = 20;
+                document.getElementById('velocitySlider').value = 20;
+                document.getElementById('velocityInput').value = 20;
+                updateVelocityDisplay();
+            }
+            
+            // Switch to moving tab if not already
+            if (currentTab !== 'moving') {
+                switchTab('moving');
+            }
+            
+            // Update physics for moving car
+            calculatePhysics();
+            updateOutput();
+            
+            if (learnMode) {
+                showExplanation("Simulasi dimulai. Mobil sekarang bergerak dengan kecepatan " + Math.abs(carVelocity) + " km/jam. Perhatikan roda yang berputar dan gaya-gaya yang bekerja.");
+            }
+        }
+        
+        // Pause simulation
+        function pauseSimulation() {
+            isPlaying = false;
+            
+            if (learnMode) {
+                showExplanation("Simulasi dijeda. Mobil berhenti. Anda dapat mengubah parameter dan melihat pengaruhnya terhadap keseimbangan.");
+            }
+        }
+        
+        // Reset simulation to default values
+        function resetSimulation() {
+            params.mass = 1500;
+            params.angle = 0;
+            params.friction = 0.6;
+            params.loadPosition = 'front';
+            carVelocity = 0;
+            carX = 0;
+            wheelRotation = 0;
+            isPlaying = false;
+            
+            // Update UI elements
+            document.getElementById('massSlider').value = params.mass;
+            document.getElementById('massInput').value = params.mass;
+            document.getElementById('massValue').textContent = params.mass;
+            
+            document.getElementById('angleSlider').value = params.angle;
+            document.getElementById('angleInput').value = params.angle;
+            document.getElementById('angleValue').textContent = params.angle;
+            
+            document.getElementById('frictionSlider').value = params.friction;
+            document.getElementById('frictionInput').value = params.friction;
+            document.getElementById('frictionValue').textContent = params.friction;
+            
+            document.getElementById('velocitySlider').value = 0;
+            document.getElementById('velocityInput').value = 0;
+            updateVelocityDisplay();
+            
+            document.getElementById('loadFront').checked = true;
+            
+            // Switch to flat road tab
+            switchTab('flat');
+            
+            // Recalculate and redraw
+            calculatePhysics();
+            updateOutput();
+            
+            if (learnMode) {
+                showExplanation("Simulasi telah direset ke kondisi awal. Mobil sekarang di jalan datar dengan massa 1500 kg dan beban di depan.");
+            }
+        }
+    </script>
+</body>
+</html>
